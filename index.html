@@ -1,0 +1,1410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELEMENTS 3D | Interactive Periodic Table</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #050914;
+  --panel: #0c1728;
+  --panel2: #101f35;
+  --cyan: #35e8ff;
+  --blue: #537dff;
+  --purple: #a66bff;
+  --text: #edf6ff;
+  --muted: #91a5bd;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse at 15% 15%, #102c51 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 70%, #21103e 0%, transparent 40%),
+    #050914;
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #65eaff;
+  border-radius: 50%;
+  animation: twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle {
+  from {opacity: .15; transform: scale(.7)}
+  to {opacity: .9; transform: scale(1.5)}
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 17px 5%;
+  background: rgba(5,9,20,.87);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid #29405c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  font-family: Orbitron;
+  font-size: 20px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: #b7cce2;
+  font-size: 12px;
+  transition: .3s;
+}
+
+nav a:hover {
+  color: var(--cyan);
+}
+
+.hero {
+  min-height: 570px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 75px 20px;
+  position: relative;
+}
+
+.tag {
+  color: var(--cyan);
+  letter-spacing: 5px;
+  font-size: 11px;
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-family: Orbitron;
+  font-size: clamp(35px, 7vw, 76px);
+  line-height: 1.2;
+  background: linear-gradient(90deg,#fff,#45dfff,#a58aff,#fff);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+  to {background-position: 200% center}
+}
+
+.hero p {
+  max-width: 700px;
+  margin-top: 25px;
+  line-height: 1.9;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.primary-btn {
+  margin-top: 32px;
+  padding: 15px 35px;
+  background: linear-gradient(120deg,#1767a9,#6e42d8);
+  border: 1px solid #70eaff;
+  border-radius: 30px;
+  color: white;
+  font-family: Orbitron;
+  cursor: pointer;
+  box-shadow: 0 0 25px #2486ff55;
+  transition: .3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px #35e8ff88;
+}
+
+.section {
+  padding: 75px 5%;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-heading h2 {
+  font-family: Orbitron;
+  font-size: clamp(22px,4vw,35px);
+  color: var(--cyan);
+  margin-bottom: 15px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+  gap: 15px;
+  max-width: 1000px;
+  margin: 0 auto 60px;
+}
+
+.stat {
+  padding: 25px;
+  background: linear-gradient(145deg,#101f35,#091323);
+  border: 1px solid #274365;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-family: Orbitron;
+  font-size: 30px;
+  color: var(--cyan);
+}
+
+.stat span {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.controls {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+input, select {
+  background: #0d1b2e;
+  border: 1px solid #345273;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 13px;
+}
+
+input {
+  width: min(420px,100%);
+}
+
+input:focus, select:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 15px #35e8ff33;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 25px auto;
+  max-width: 1100px;
+}
+
+.legend-item {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 10px;
+  color: #b9cbe0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.table-wrap {
+  max-width: 1450px;
+  margin: auto;
+  overflow-x: auto;
+  padding: 15px 0 25px;
+}
+
+.periodic-grid {
+  display: grid;
+  grid-template-columns: repeat(18,minmax(54px,1fr));
+  grid-template-rows: repeat(10,83px);
+  gap: 5px;
+  min-width: 1080px;
+}
+
+.element {
+  border: 1px solid var(--color);
+  background: color-mix(in srgb,var(--color) 12%,#0a1424);
+  border-radius: 7px;
+  cursor: pointer;
+  padding: 5px 3px;
+  color: white;
+  text-align: center;
+  position: relative;
+  transition: .25s;
+  min-width: 0;
+}
+
+.element:hover {
+  z-index: 5;
+  transform: scale(1.13);
+  background: color-mix(in srgb,var(--color) 30%,#101c30);
+  box-shadow: 0 0 20px var(--color);
+}
+
+.element .number {
+  font-size: 9px;
+  text-align: left;
+  display: block;
+  color: #c4d5e9;
+}
+
+.element .symbol {
+  display: block;
+  font-family: Orbitron;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color);
+  margin: 4px 0;
+}
+
+.element .ename {
+  font-size: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.element .mass {
+  font-size: 7px;
+  color: #9fb3c9;
+  margin-top: 3px;
+}
+
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  color: #7592ae;
+  background: #0c1728;
+  border: 1px dashed #345273;
+  border-radius: 6px;
+}
+
+.group-label {
+  text-align: center;
+  color: #55738e;
+  font-size: 10px;
+  padding: 5px;
+}
+
+.table-caption {
+  color: #8198b2;
+  font-size: 12px;
+  text-align: center;
+  margin: 20px;
+}
+
+.category-alkali {--color:#ff656f}
+.category-alkaline {--color:#ffa65b}
+.category-transition {--color:#f2d35f}
+.category-post {--color:#64d7b5}
+.category-metalloid {--color:#52c6ee}
+.category-nonmetal {--color:#79a8ff}
+.category-halogen {--color:#a78bfa}
+.category-noble {--color:#ed85cf}
+.category-lanthanide {--color:#ed9cbd}
+.category-actinide {--color:#e58a82}
+.category-unknown {--color:#8997a9}
+
+#detail {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,.8);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-box {
+  position: relative;
+  width: min(1050px,100%);
+  max-height: 94vh;
+  overflow-y: auto;
+  background: linear-gradient(145deg,#12243c,#07111f);
+  border: 1px solid #3d6d99;
+  border-radius: 22px;
+  padding: 30px;
+  box-shadow: 0 0 60px #2879ff33;
+}
+
+.close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 10;
+  border: 1px solid #55728e;
+  background: #152941;
+  color: white;
+  padding: 8px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.detail-top {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 35px;
+  align-items: center;
+  margin: 25px 0;
+}
+
+.big-element {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  border: 2px solid var(--color);
+  background: color-mix(in srgb,var(--color) 15%,#091323);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px color-mix(in srgb,var(--color) 35%,transparent);
+}
+
+.big-element small {
+  font-size: 14px;
+}
+
+.big-element strong {
+  font-family: Orbitron;
+  font-size: 75px;
+  color: var(--color);
+}
+
+.big-element span {
+  font-size: 12px;
+}
+
+.detail-title h2 {
+  font-family: Orbitron;
+  color: var(--cyan);
+  font-size: clamp(23px,4vw,38px);
+  margin-bottom: 12px;
+}
+
+.detail-title p {
+  color: #a8bdd4;
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+.element-photo {
+  width: 100%;
+  max-width: 270px;
+  max-height: 210px;
+  object-fit: contain;
+  background: #07111e;
+  border: 1px solid #294866;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.info-card {
+  background: #0b192b;
+  padding: 17px;
+  border: 1px solid #243d59;
+  border-radius: 12px;
+}
+
+.info-card label {
+  color: #819cb8;
+  display: block;
+  font-size: 10px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-card strong {
+  font-size: 14px;
+  color: #e5f6ff;
+  overflow-wrap: anywhere;
+}
+
+.detail-section {
+  background: #0b192b;
+  border: 1px solid #29435e;
+  padding: 22px;
+  border-radius: 13px;
+  margin: 15px 0;
+}
+
+.detail-section h3 {
+  color: var(--cyan);
+  font-family: Orbitron;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.detail-section p {
+  color: #b5c7d9;
+  font-size: 13px;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.atom-section {
+  text-align: center;
+  margin: 25px 0;
+  background: #07111f;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #243e5b;
+}
+
+.atom {
+  width: 190px;
+  height: 190px;
+  position: relative;
+  margin: 20px auto;
+}
+
+.nucleus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 35px;
+  height: 35px;
+  background: radial-gradient(circle,#fff,#35e8ff,#3469db);
+  border-radius: 50%;
+  box-shadow: 0 0 30px #35e8ff;
+  z-index: 3;
+}
+
+.orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 160px;
+  height: 65px;
+  border: 1px solid #4c9dff;
+  border-radius: 50%;
+  transform: translate(-50%,-50%) rotate(0deg);
+}
+
+.orbit:nth-child(2) {transform:translate(-50%,-50%) rotate(60deg)}
+.orbit:nth-child(3) {transform:translate(-50%,-50%) rotate(120deg)}
+
+.electron {
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+}
+
+.orbit:nth-child(2) .electron {background:#ba85ff}
+.orbit:nth-child(3) .electron {background:#ffae74}
+
+.atom-caption {
+  color: #90abc7;
+  font-size: 11px;
+}
+
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  gap: 18px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.learn-card {
+  padding: 25px;
+  background: linear-gradient(140deg,#12243b,#0b1425);
+  border: 1px solid #294966;
+  border-radius: 16px;
+  transition: .3s;
+}
+
+.learn-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--cyan);
+  box-shadow: 0 10px 30px #159eff20;
+}
+
+.learn-card .emoji {
+  font-size: 32px;
+}
+
+.learn-card h3 {
+  color: var(--cyan);
+  font-family: Orbitron;
+  font-size: 15px;
+  margin: 15px 0;
+}
+
+.learn-card p {
+  font-size: 12px;
+  color: #a6bad0;
+  line-height: 1.9;
+}
+
+.loading {
+  text-align: center;
+  padding: 45px;
+  color: var(--cyan);
+}
+
+footer {
+  border-top: 1px solid #233b55;
+  padding: 40px 20px;
+  text-align: center;
+  color: #829ab2;
+  font-size: 12px;
+  line-height: 2;
+}
+
+footer strong {
+  color: var(--cyan);
+  font-family: Orbitron;
+}
+
+@media(max-width:650px) {
+  header {flex-direction:column}
+  nav {justify-content:center}
+  .detail-top {grid-template-columns:1fr;text-align:center}
+  .big-element {margin:auto}
+  .detail-box {padding:18px}
+  .hero {min-height:470px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<header>
+  <div class="logo">ELEMENTS 3D</div>
+  <nav>
+    <a href="#home">HOME</a>
+    <a href="#periodic">PERIODIC TABLE</a>
+    <a href="#learn">LEARN</a>
+    <a href="#about">ABOUT</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="tag">THE SCIENCE OF EVERYTHING</div>
+  <h1>EXPLORE THE<br>UNIVERSE OF ELEMENTS</h1>
+  <p>
+    Welcome to an interactive journey through the building blocks
+    of our universe. Discover all 118 chemical elements, explore
+    their atomic structures, understand their properties and uncover
+    the science behind matter itself.
+  </p>
+  <button class="primary-btn" onclick="document.getElementById('periodic').scrollIntoView({behavior:'smooth'})">
+    EXPLORE THE PERIODIC TABLE
+  </button>
+</section>
+
+<div class="stats">
+  <div class="stat"><strong>118</strong><span>KNOWN ELEMENTS</span></div>
+  <div class="stat"><strong>18</strong><span>GROUPS</span></div>
+  <div class="stat"><strong>7</strong><span>PERIODS</span></div>
+  <div class="stat"><strong>4</strong><span>ELEMENT BLOCKS</span></div>
+</div>
+
+<section class="section" id="periodic">
+
+<div class="section-heading">
+  <h2>THE PERIODIC TABLE</h2>
+  <p>Click any element to unlock its scientific profile.</p>
+</div>
+
+<div class="controls">
+  <input type="search" id="search" placeholder="Search by element, symbol or atomic number...">
+  <select id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="alkali">Alkali metals</option>
+    <option value="alkaline">Alkaline earth metals</option>
+    <option value="transition">Transition metals</option>
+    <option value="post">Post-transition metals</option>
+    <option value="metalloid">Metalloids</option>
+    <option value="nonmetal">Reactive nonmetals</option>
+    <option value="halogen">Halogens</option>
+    <option value="noble">Noble gases</option>
+    <option value="lanthanide">Lanthanides</option>
+    <option value="actinide">Actinides</option>
+  </select>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="table-wrap">
+  <div class="periodic-grid" id="periodicGrid">
+    <div class="loading">INITIALIZING ELEMENT DATABASE...</div>
+  </div>
+</div>
+
+<p class="table-caption">
+  The lanthanides and actinides are displayed in separate rows below the main table.
+</p>
+
+</section>
+
+<section class="section" id="learn">
+
+<div class="section-heading">
+  <h2>CHEMISTRY LEARNING CENTRE</h2>
+  <p>Understand the fundamental concepts behind the periodic table.</p>
+</div>
+
+<div class="learn-grid">
+
+  <article class="learn-card">
+    <div class="emoji">⚛️</div>
+    <h3>ATOMIC STRUCTURE</h3>
+    <p>
+      Every atom consists of a nucleus containing positively charged
+      protons and neutral neutrons. Negatively charged electrons
+      occupy regions around the nucleus called electron shells
+      and orbitals. The number of protons determines the identity
+      of an element.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">🔢</div>
+    <h3>ATOMIC NUMBER</h3>
+    <p>
+      Atomic number is the number of protons present in the nucleus
+      of an atom. Hydrogen has atomic number 1 because it contains
+      one proton, while oxygen has atomic number 8 because it
+      contains eight protons.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">⚖️</div>
+    <h3>ATOMIC MASS</h3>
+    <p>
+      Atomic mass is the weighted average mass of an element's
+      naturally occurring isotopes. It is expressed in unified
+      atomic mass units (u). Protons and neutrons account for
+      nearly all the mass of an atom.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">📊</div>
+    <h3>GROUPS AND PERIODS</h3>
+    <p>
+      The periodic table contains 18 vertical columns called groups
+      and 7 horizontal rows called periods. Elements in the same
+      group often share similar chemical properties because they
+      have related outer electron configurations.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">🔬</div>
+    <h3>ISOTOPES</h3>
+    <p>
+      Isotopes are atoms of the same element with equal numbers
+      of protons but different numbers of neutrons. For example,
+      carbon-12 and carbon-14 are isotopes of carbon.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">⚡</div>
+    <h3>ELECTRON CONFIGURATION</h3>
+    <p>
+      Electron configuration describes how electrons are arranged
+      in atomic orbitals. This arrangement helps explain an
+      element's chemical behaviour, bonding and position in
+      the periodic table.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">🧲</div>
+    <h3>PERIODIC TRENDS</h3>
+    <p>
+      Atomic radius, electronegativity and ionization energy show
+      patterns across periods and down groups. These trends help
+      scientists predict chemical behaviour and compare elements.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">🧪</div>
+    <h3>CHEMICAL BONDING</h3>
+    <p>
+      Atoms combine to form compounds through chemical bonds.
+      Ionic bonding involves electron transfer, covalent bonding
+      involves electron sharing, and metallic bonding involves
+      delocalized electrons.
+    </p>
+  </article>
+
+  <article class="learn-card">
+    <div class="emoji">🌌</div>
+    <h3>ORIGIN OF ELEMENTS</h3>
+    <p>
+      Many elements were created through stellar nucleosynthesis.
+      Hydrogen and helium formed in the early universe, while
+      stars and stellar explosions helped create many heavier
+      elements. Scientists also synthesize elements in laboratories.
+    </p>
+  </article>
+
+</div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-heading">
+    <h2>ABOUT THIS PROJECT</h2>
+    <p>
+      ELEMENTS 3D is an interactive educational experience
+      designed to make chemistry easier and more exciting.
+    </p>
+  </div>
+
+  <div class="learn-grid">
+    <article class="learn-card">
+      <h3>OUR MISSION</h3>
+      <p>
+        To make scientific knowledge accessible through interactive
+        technology, attractive visualizations and detailed
+        element-by-element learning.
+      </p>
+    </article>
+    <article class="learn-card">
+      <h3>OUR DATABASE</h3>
+      <p>
+        Element information is retrieved from an open periodic
+        table dataset. Element images and scientific properties
+        are displayed where available.
+      </p>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <strong>ELEMENTS 3D</strong>
+  <p>Discover. Explore. Understand.</p>
+  <p>Educational Periodic Table Project | 118 Elements</p>
+  <p>Element data: Bowserinator Periodic Table JSON dataset.</p>
+</footer>
+
+<div id="detail">
+  <div class="detail-box">
+    <button class="close" onclick="closeDetail()">✕ CLOSE</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+
+// BACKGROUND PARTICLES
+
+const particles = document.getElementById("particles");
+
+for(let i=0;i<100;i++){
+  const star=document.createElement("div");
+  star.className="star";
+  star.style.left=Math.random()*100+"%";
+  star.style.top=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*4+"s";
+  particles.appendChild(star);
+}
+
+
+// ELEMENT CATEGORIES
+
+const categoryNames = {
+  alkali:"Alkali metal",
+  alkaline:"Alkaline earth metal",
+  transition:"Transition metal",
+  post:"Post-transition metal",
+  metalloid:"Metalloid",
+  nonmetal:"Reactive nonmetal",
+  halogen:"Halogen",
+  noble:"Noble gas",
+  lanthanide:"Lanthanide",
+  actinide:"Actinide",
+  unknown:"Unknown / unclassified"
+};
+
+const colors = {
+  alkali:"#ff656f",
+  alkaline:"#ffa65b",
+  transition:"#f2d35f",
+  post:"#64d7b5",
+  metalloid:"#52c6ee",
+  nonmetal:"#79a8ff",
+  halogen:"#a78bfa",
+  noble:"#ed85cf",
+  lanthanide:"#ed9cbd",
+  actinide:"#e58a82",
+  unknown:"#8997a9"
+};
+
+
+// DATABASE
+
+let elements = [];
+let currentElement = null;
+
+const grid = document.getElementById("periodicGrid");
+
+const DATA_URL =
+"https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json";
+
+
+// CATEGORY NORMALIZATION
+
+function getCategory(e){
+
+  const c=(e.category || "").toLowerCase();
+
+  if(c.includes("alkali metal") && !c.includes("alkaline"))
+    return "alkali";
+
+  if(c.includes("alkaline earth"))
+    return "alkaline";
+
+  if(c.includes("transition metal"))
+    return "transition";
+
+  if(c.includes("post-transition"))
+    return "post";
+
+  if(c.includes("metalloid"))
+    return "metalloid";
+
+  if(c.includes("halogen"))
+    return "halogen";
+
+  if(c.includes("noble gas"))
+    return "noble";
+
+  if(c.includes("lanthanoid") || c.includes("lanthanide"))
+    return "lanthanide";
+
+  if(c.includes("actinoid") || c.includes("actinide"))
+    return "actinide";
+
+  if(c.includes("nonmetal"))
+    return "nonmetal";
+
+  return "unknown";
+}
+
+
+// LOAD DATA
+
+async function loadElements(){
+
+  try{
+
+    const response=await fetch(DATA_URL);
+
+    if(!response.ok) throw new Error("Database unavailable");
+
+    const data=await response.json();
+
+    elements=data.elements.map(e=>({
+      ...e,
+      normalizedCategory:getCategory(e)
+    }));
+
+    renderLegend();
+    renderTable(elements);
+
+  }catch(error){
+
+    grid.innerHTML=`
+      <div class="loading">
+        <h3>DATABASE CONNECTION FAILED</h3>
+        <p style="margin-top:15px">
+        Please check your internet connection and refresh the page.
+        The element database is hosted externally.
+        </p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+// LEGEND
+
+function renderLegend(){
+
+  const legend=document.getElementById("legend");
+
+  legend.innerHTML="";
+
+  Object.keys(categoryNames).forEach(key=>{
+
+    const item=document.createElement("div");
+    item.className="legend-item";
+
+    item.innerHTML=`
+      <span class="dot" style="background:${colors[key]}"></span>
+      ${categoryNames[key]}
+    `;
+
+    legend.appendChild(item);
+
+  });
+
+}
+
+
+// PERIODIC TABLE POSITION
+
+function getPosition(e){
+
+  let x=Number(e.xpos);
+  let y=Number(e.ypos);
+
+  // Keep lanthanides and actinides in their own rows.
+
+  if(getCategory(e)==="lanthanide"){
+    x=Number(e.number)-56;
+    y=9;
+  }
+
+  if(getCategory(e)==="actinide"){
+    x=Number(e.number)-88;
+    y=10;
+  }
+
+  return {x,y};
+}
+
+
+// RENDER TABLE
+
+function renderTable(list){
+
+  grid.innerHTML="";
+
+  list.forEach(e=>{
+
+    const pos=getPosition(e);
+
+    if(!pos.x || !pos.y) return;
+
+    const card=document.createElement("button");
+
+    card.className="element category-"+e.normalizedCategory;
+
+    card.style.gridColumn=pos.x;
+    card.style.gridRow=pos.y;
+
+    card.dataset.name=e.name.toLowerCase();
+    card.dataset.symbol=e.symbol.toLowerCase();
+    card.dataset.number=e.number;
+    card.dataset.category=e.normalizedCategory;
+
+    card.innerHTML=`
+      <span class="number">${e.number}</span>
+      <span class="symbol">${e.symbol}</span>
+      <span class="ename">${e.name}</span>
+      <span class="mass">${Number(e.atomic_mass).toFixed(2)}</span>
+    `;
+
+    card.onclick=()=>openDetail(e);
+
+    grid.appendChild(card);
+
+  });
+
+  // Display filtered-out elements as empty spaces.
+
+  if(list.length===0){
+    grid.innerHTML=`
+      <div class="loading" style="grid-column:1/-1">
+        NO ELEMENTS FOUND
+      </div>
+    `;
+  }
+
+}
+
+
+// SEARCH
+
+document.getElementById("search").addEventListener("input",filterElements);
+document.getElementById("categoryFilter").addEventListener("change",filterElements);
+
+function filterElements(){
+
+  const query=document.getElementById("search").value.toLowerCase().trim();
+  const category=document.getElementById("categoryFilter").value;
+
+  const filtered=elements.filter(e=>{
+
+    const matchesSearch=
+      e.name.toLowerCase().includes(query) ||
+      e.symbol.toLowerCase().includes(query) ||
+      String(e.number)===query;
+
+    const matchesCategory=
+      category==="all" || e.normalizedCategory===category;
+
+    return matchesSearch && matchesCategory;
+
+  });
+
+  renderTable(filtered);
+
+}
+
+
+// ATOMIC STRUCTURE VISUALIZATION
+
+function atomVisualization(){
+
+  return `
+    <div class="atom-section">
+      <h3 style="color:var(--cyan);font-family:Orbitron">
+        ATOMIC STRUCTURE VISUALIZATION
+      </h3>
+
+      <div class="atom">
+        <div class="nucleus"></div>
+        <div class="orbit">
+          <div class="electron"></div>
+        </div>
+        <div class="orbit">
+          <div class="electron"></div>
+        </div>
+        <div class="orbit">
+          <div class="electron"></div>
+        </div>
+      </div>
+
+      <p class="atom-caption">
+        Conceptual atomic illustration.
+        Not an accurate scale representation of an atom.
+      </p>
+    </div>
+  `;
+
+}
+
+
+// DETAIL PAGE
+
+function openDetail(e){
+
+  currentElement=e;
+
+  const category=e.normalizedCategory;
+
+  const box=document.getElementById("detail");
+
+  box.style.display="flex";
+
+  const imageURL=e.image && e.image.url ? e.image.url : "";
+
+  const imageHTML=imageURL ? `
+    <img class="element-photo"
+      src="${imageURL}"
+      alt="${e.name}"
+      onerror="this.style.display='none'">
+  ` : `
+    <div class="element-photo"
+      style="height:100px;display:flex;align-items:center;justify-content:center;color:#829bb5">
+      Image unavailable
+    </div>
+  `;
+
+  const fields=[
+    ["Atomic Number",e.number],
+    ["Atomic Mass",e.atomic_mass+" u"],
+    ["Symbol",e.symbol],
+    ["Element Category",categoryNames[category]],
+    ["Group",e.group || "Not specified"],
+    ["Period",e.period || "Not specified"],
+    ["Block",e.block || "Not specified"],
+    ["Phase",e.phase || "Not specified"],
+    ["Density",e.density ? e.density+" g/cm³":"Not available"],
+    ["Melting Point",e.melt ? e.melt+" K":"Not available"],
+    ["Boiling Point",e.boil ? e.boil+" K":"Not available"],
+    ["Electronegativity",e.electronegativity_pauling ?? "Not available"],
+    ["Electron Affinity",e.electron_affinity ?? "Not available"],
+    ["Atomic Radius",e.atomic_radius ?? "Not available"],
+    ["Ionization Energy",e.ionization_energy ?? "Not available"],
+    ["Natural Occurrence",e.natural_occurrence || "Not specified"]
+  ];
+
+  const cards=fields.map(([label,value])=>`
+    <div class="info-card">
+      <label>${label}</label>
+      <strong>${value}</strong>
+    </div>
+  `).join("");
+
+  const summary=e.summary || "No summary is available.";
+
+  const electron=e.electron_configuration || "Not available";
+
+  const shell=e.shells ? e.shells.join(", ") : "Not available";
+
+  const oxidation=e.oxidation_states || "Not specified";
+
+  const discovered=e.discovered_by || "Unknown";
+
+  const named=e.named_by || "Not specified";
+
+  const appearance=e.appearance || "Not specified";
+
+  const source=e.source || "Not available";
+
+  const detailHTML=`
+
+    <div class="detail-top">
+
+      <div class="big-element category-${category}">
+        <small>ATOMIC NUMBER ${e.number}</small>
+        <strong>${e.symbol}</strong>
+        <span>${e.name}</span>
+      </div>
+
+      <div class="detail-title">
+        <h2>${e.name.toUpperCase()}</h2>
+        <p>${categoryNames[category]}</p>
+        <p style="margin-top:12px">
+          ${summary}
+        </p>
+        ${imageHTML}
+      </div>
+
+    </div>
+
+    <div class="detail-section">
+      <h3>SCIENTIFIC OVERVIEW</h3>
+      <p>
+        ${e.name} is a chemical element represented by the symbol
+        ${e.symbol}. Its atomic number is ${e.number}, meaning that
+        every atom of this element contains ${e.number} protons
+        in its nucleus.
+
+        Its standard atomic mass is ${e.atomic_mass} unified
+        atomic mass units. It belongs to the
+        ${categoryNames[category]} category.
+      </p>
+    </div>
+
+    <div class="detail-section">
+      <h3>PHYSICAL AND CHEMICAL PROPERTIES</h3>
+      <div class="detail-grid">
+        ${cards}
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>ELECTRON CONFIGURATION</h3>
+      <p>
+        Electron configuration: ${electron}
+
+        Electron shell distribution: ${shell}
+
+        Oxidation states: ${oxidation}
+      </p>
+    </div>
+
+    <div class="detail-section">
+      <h3>APPEARANCE AND CHARACTERISTICS</h3>
+      <p>${appearance}</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>DISCOVERY AND NAMING</h3>
+      <p>
+        Discovered by: ${discovered}
+
+        Named by: ${named}
+      </p>
+    </div>
+
+    <div class="detail-section">
+      <h3>WHY IS THIS ELEMENT IMPORTANT?</h3>
+      <p>${summary}
+
+      The properties and chemical behaviour of ${e.name}
+      make it an important subject in chemistry. Its applications
+      depend on its physical properties, chemical reactivity,
+      abundance and interactions with other substances.</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>ADDITIONAL SCIENTIFIC INFORMATION</h3>
+      <p>
+        Standard atomic mass: ${e.atomic_mass} u
+
+        Element category: ${categoryNames[category]}
+
+        Period: ${e.period || "Not specified"}
+
+        Group: ${e.group || "Not specified"}
+
+        Block: ${e.block || "Not specified"}
+
+        Electron configuration: ${electron}
+      </p>
+    </div>
+
+    ${atomVisualization()}
+
+    <div class="detail-section">
+      <h3>FURTHER READING</h3>
+      <p>
+        Explore the scientific source and additional element
+        information through the external reference below.
+      </p>
+      <p style="margin-top:12px">
+        <a href="${source}" target="_blank"
+           rel="noopener noreferrer"
+           style="color:var(--cyan);overflow-wrap:anywhere">
+          OPEN ELEMENT REFERENCE ↗
+        </a>
+      </p>
+    </div>
+
+    <div style="text-align:center;margin-top:25px;color:#809ab5;font-size:11px">
+      END OF ELEMENT PROFILE — ${e.name.toUpperCase()}
+    </div>
+
+  `;
+
+  document.getElementById("detailContent").innerHTML=detailHTML;
+
+  box.scrollTop=0;
+
+  document.getElementById("detailContent").scrollTop=0;
+
+  document.body.style.overflow="hidden";
+
+}
+
+
+function closeDetail(){
+
+  document.getElementById("detail").style.display="none";
+
+  document.body.style.overflow="";
+
+  currentElement=null;
+
+}
+
+
+// CLOSE ON BACKGROUND CLICK
+
+document.getElementById("detail").addEventListener("click",function(e){
+
+  if(e.target===this) closeDetail();
+
+});
+
+
+// KEYBOARD ESCAPE
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key==="Escape") closeDetail();
+
+});
+
+
+// START
+
+loadElements();
+
+</script>
+
+</body>
+</html>
