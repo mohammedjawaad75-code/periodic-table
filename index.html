@@ -85,11 +85,25 @@ header {
 }
 
 .logo {
-  font-family: Orbitron;
-  font-size: 20px;
-  color: var(--cyan);
-  letter-spacing: 2px;
-  font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    font-family: Orbitron;
+    font-size: 20px;
+    color: #35e8ff;
+    letter-spacing: 2px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.logo img {
+    display: block;
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px #35e8ff);
 }
 
 nav {
@@ -659,7 +673,10 @@ footer strong {
 <div id="particles"></div>
 
 <header>
-  <div class="logo">ELEMENTS 3D</div>
+ <div class="logo">
+    <img src="./logo.png" alt="Logo">
+    <span>ELEMENTS 3D</span>
+</div>
   <nav>
     <a href="#home">HOME</a>
     <a href="#periodic">PERIODIC TABLE</a>
